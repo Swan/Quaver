@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeAgo", "Quaver.Dependenc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{57D50BBE-44CF-4B6B-B2D0-E4C92355043F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quaver.Tests.Desktop", "Quaver.Tests.Desktop\Quaver.Tests.Desktop.csproj", "{CEF15AB6-CC6C-42C6-A51E-00B94B417A25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quaver.Tests", "Quaver.Tests\Quaver.Tests.csproj", "{BDEA81DA-CEB0-4824-BC99-B418BB375C23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,14 @@ Global
 		{5F2A9C79-F02A-45FC-82F3-F76C6A519163}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2A9C79-F02A-45FC-82F3-F76C6A519163}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2A9C79-F02A-45FC-82F3-F76C6A519163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEF15AB6-CC6C-42C6-A51E-00B94B417A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEF15AB6-CC6C-42C6-A51E-00B94B417A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEF15AB6-CC6C-42C6-A51E-00B94B417A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEF15AB6-CC6C-42C6-A51E-00B94B417A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDEA81DA-CEB0-4824-BC99-B418BB375C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDEA81DA-CEB0-4824-BC99-B418BB375C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDEA81DA-CEB0-4824-BC99-B418BB375C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDEA81DA-CEB0-4824-BC99-B418BB375C23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
