@@ -33,6 +33,7 @@ using Quaver.Shared.Screens;
 using Quaver.Shared.Screens.Alpha;
 using Quaver.Shared.Screens.Menu;
 using Quaver.Shared.Screens.Settings;
+using Quaver.Shared.Screens.Tournament;
 using Quaver.Shared.Skinning;
 using Steamworks;
 using Wobble;
@@ -226,6 +227,8 @@ namespace Quaver.Shared
             QuaverScreenManager.Update(gameTime);
             Transitioner.Update(gameTime);
 
+            if (KeyboardManager.IsUniqueKeyPress(Keys.D4))
+                QuaverScreenManager.ChangeScreen(new TournamentScreen());
             SkinManager.HandleSkinReloading();
             LimitFpsOnInactiveWindow();
         }
