@@ -92,6 +92,11 @@ namespace Quaver.Shared.Screens.Gameplay
         public List<Score> LocalScores { get; }
 
         /// <summary>
+        ///     The player that is being spectated (if any)
+        /// </summary>
+        public SpectatorClient SpectatorClient { get; }
+
+        /// <summary>
         ///     The MD5 hash of the map being played.
         /// </summary>
         public string MapHash { get; }
@@ -270,8 +275,9 @@ namespace Quaver.Shared.Screens.Gameplay
         /// <param name="isPlayTesting"></param>
         /// <param name="playTestTime"></param>
         /// <param name="isCalibratingOffset"></param>
+        /// <param name="spectatorClient"></param>
         public GameplayScreen(Qua map, string md5, List<Score> scores, Replay replay = null, bool isPlayTesting = false, double playTestTime = 0,
-            bool isCalibratingOffset = false)
+            bool isCalibratingOffset = false, SpectatorClient spectatorClient = null)
         {
             TimePlayed = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -293,6 +299,10 @@ namespace Quaver.Shared.Screens.Gameplay
             PlayTestAudioTime = playTestTime;
             IsCalibratingOffset = isCalibratingOffset;
             IsMultiplayerGame = OnlineManager.CurrentGame != null;
+            SpectatorClient = spectatorClient;
+
+            if (SpectatorClient != null)
+                LoadedReplay = SpectatorClient.Replay;
 
             if (IsMultiplayerGame)
             {
@@ -362,6 +372,13 @@ namespace Quaver.Shared.Screens.Gameplay
             {
                 HandleResuming();
                 PlayComboBreakSound();
+            }
+
+            // Handles spectating clients
+            if (InReplayMode)
+            {
+                var inputManager = (KeysInputManager) Ruleset.InputManager;
+                inputManager.ReplayInputManager?.HandleSpectating();
             }
 
             HandleInput(gameTime);

@@ -33,6 +33,7 @@ using Quaver.Shared.Screens.Gameplay.UI.Counter;
 using Quaver.Shared.Screens.Gameplay.UI.Multiplayer;
 using Quaver.Shared.Screens.Gameplay.UI.Offset;
 using Quaver.Shared.Screens.Gameplay.UI.Scoreboard;
+using Quaver.Shared.Screens.Gameplay.UI.Spectator;
 using Quaver.Shared.Screens.Multiplayer;
 using Quaver.Shared.Screens.Result;
 using Quaver.Shared.Screens.Select;
@@ -47,6 +48,7 @@ using Wobble.Graphics.UI;
 using Wobble.Logging;
 using Wobble.Screens;
 using Wobble.Window;
+using MathHelper = Microsoft.Xna.Framework.MathHelper;
 
 namespace Quaver.Shared.Screens.Gameplay
 {
@@ -186,6 +188,10 @@ namespace Quaver.Shared.Screens.Gameplay
         /// </summary>
         public ScoreboardUser SelfScoreboard { get; private set; }
 
+        /// <summary>
+        /// </summary>
+        private SpectatorDialog SpectatorDialog { get; set; }
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -205,6 +211,16 @@ namespace Quaver.Shared.Screens.Gameplay
 
             if (!Screen.IsPlayTesting && !Screen.IsCalibratingOffset)
                 CreateScoreboards();
+
+            if (Screen.SpectatorClient != null)
+            {
+                SpectatorDialog = new SpectatorDialog
+                {
+                    Parent = Container,
+                    Alignment = Alignment.MidCenter,
+                    Alpha = 0
+                };
+            }
 
             CreateProgressBar();
             CreateScoreDisplay();
@@ -286,6 +302,12 @@ namespace Quaver.Shared.Screens.Gameplay
             GradeDisplay.X = AccuracyDisplay.X - AccuracyDisplay.Width - 8;
             GradeDisplay.Height = AccuracyDisplay.Height;
             GradeDisplay.UpdateWidth();
+
+            if (SpectatorDialog != null)
+            {
+                SpectatorDialog.Alpha = MathHelper.Lerp(SpectatorDialog.Alpha, Screen.IsPaused ? 1 : 0,
+                    (float) Math.Min(gameTime.ElapsedGameTime.TotalMilliseconds / 100, 1));
+            }
         }
 
         /// <inheritdoc />

@@ -65,6 +65,7 @@ namespace Quaver.Shared.Online
                 Self = null;
                 OnlineUsers = new Dictionary<int, User>();
                 MultiplayerGames = new Dictionary<string, MultiplayerGame>();
+                SpectatorClients = new Dictionary<int, SpectatorClient>();
 
                 if (_client != null)
                     return;
@@ -98,6 +99,12 @@ namespace Quaver.Shared.Online
         ///     game_hash:game
         /// </summary>
         public static Dictionary<string, MultiplayerGame> MultiplayerGames { get; private set; }
+
+        /// <summary>
+        ///     The user's that are currently being spectated
+        ///     (usually only one, but can be multiple if in a tournamment client)
+        /// </summary>
+        public static Dictionary<int, SpectatorClient> SpectatorClients { get; private set; }
 
         /// <summary>
         ///     The current multiplayer game the player is in

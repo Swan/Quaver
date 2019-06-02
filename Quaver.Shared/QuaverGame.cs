@@ -14,6 +14,8 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Quaver.Server.Client.Structures;
+using Quaver.Server.Common.Objects;
 using Quaver.Shared.Assets;
 using Quaver.Shared.Audio;
 using Quaver.Shared.Config;
@@ -31,6 +33,7 @@ using Quaver.Shared.Online.Chat;
 using Quaver.Shared.Scheduling;
 using Quaver.Shared.Screens;
 using Quaver.Shared.Screens.Alpha;
+using Quaver.Shared.Screens.Gameplay;
 using Quaver.Shared.Screens.Menu;
 using Quaver.Shared.Screens.Settings;
 using Quaver.Shared.Skinning;
@@ -222,6 +225,8 @@ namespace Quaver.Shared
             DialogManager.Update(gameTime);
 
             HandleGlobalInput(gameTime);
+            TestSpectate();
+            TestSpectateReplay();
 
             QuaverScreenManager.Update(gameTime);
             Transitioner.Update(gameTime);
@@ -507,6 +512,62 @@ namespace Quaver.Shared
                 InitializeFpsLimiting();
 
             WindowActiveInPreviousFrame = IsActive;
+        }
+
+        /// <summary>
+        /// </summary>
+        private void TestSpectate()
+        {
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.D2))
+                return;
+
+            var user = new Server.Client.Structures.User()
+            {
+                OnlineUser = new OnlineUser()
+                {
+                    Id = -1,
+                    Username = "Test Spectator"
+                }
+            };
+
+            var spectatorClient = new SpectatorClient(user);
+            spectatorClient.PlayNewMap(MapManager.Selected.Value, 0);
+
+            if (!OnlineManager.SpectatorClients.ContainsKey(user.OnlineUser.Id))
+                OnlineManager.SpectatorClients.Add(user.OnlineUser.Id, spectatorClient);
+
+            var qua = MapManager.Selected.Value.LoadQua();
+            MapManager.Selected.Value.Qua = qua;
+
+            QuaverScreenManager.ChangeScreen(new GameplayScreen(qua, MapManager.Selected.Value.Md5Checksum, new List<Score>(),
+                null, false, 0, false, spectatorClient));
+        }
+
+        private void TestSpectateReplay()
+        {
+            if (!KeyboardManager.IsUniqueKeyPress(Keys.D3))
+                return;
+
+            var rp = ReplayHelper.GeneratePerfectReplay(MapManager.Selected.Value.Qua, MapManager.Selected.Value.Md5Checksum);
+
+            var currentFrame = -1;
+
+            ThreadScheduler.Run(() =>
+            {
+                while (currentFrame + 1 < rp.Frames.Count)
+                {
+                    currentFrame++;
+
+                    var frame = rp.Frames[currentFrame];
+                    OnlineManager.SpectatorClients[-1].AddFrame(frame);
+                    Console.WriteLine("Added Frame");
+
+                    if (currentFrame % 60 == 0)
+                        Thread.Sleep(5000);
+                    else
+                        Thread.Sleep(10);
+                }
+            });
         }
     }
 }

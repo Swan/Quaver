@@ -12,9 +12,11 @@ using Quaver.API.Maps.Processors.Scoring;
 using Quaver.API.Maps.Processors.Scoring.Data;
 using Quaver.API.Replays;
 using Quaver.API.Replays.Virtual;
+using Quaver.Shared.Audio;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.Playfield;
+using Wobble.Logging;
 
 namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
 {
@@ -69,7 +71,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
             Screen = screen;
             Replay = Screen.LoadedReplay;
 
-            VirtualPlayer = new VirtualReplayPlayer(Replay, Screen.Map);
+            VirtualPlayer = new VirtualReplayPlayer(Replay, Screen.Map, Screen.SpectatorClient != null);
             VirtualPlayer.PlayAllFrames();
 
             // Populate unique key presses/releases.
@@ -80,6 +82,32 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
             }
         }
 
+        /// <summary>
+        ///     Handles spectating a user if applicable
+        /// </summary>
+        public void HandleSpectating()
+        {
+            if (Screen.SpectatorClient != null)
+            {
+                if (CurrentFrame >= Replay.Frames.Count)
+                {
+                    if (AudioEngine.Track.IsPlaying)
+                        AudioEngine.Track.Pause();
+
+                    if (!Screen.IsPaused)
+                        Screen.IsPaused = true;
+                    return;
+                }
+
+                VirtualPlayer.PlayAllFrames();
+
+                if (Screen.IsPaused)
+                    Screen.IsPaused = false;
+
+                if (AudioEngine.Track.IsPaused)
+                    AudioEngine.Track.Play();
+            }
+        }
         /// <summary>
         ///     Determines which frame we are on in the replay and sets if it has unique key presses/releases.
         /// </summary>
@@ -124,6 +152,9 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
 
         private void HandleScoring()
         {
+            Console.WriteLine(CurrentVirtualReplayStat + " " + VirtualPlayer.ScoreProcessor.Stats.Count + " " +
+                VirtualPlayer.CurrentFrame + " " + VirtualPlayer.Replay.Frames.Count);
+
             for (var i = CurrentVirtualReplayStat + 1; i < VirtualPlayer.ScoreProcessor.Stats.Count; i++)
             {
                 var hom = Screen.Ruleset.HitObjectManager as HitObjectManagerKeys;
