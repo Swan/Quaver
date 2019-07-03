@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Quaver.Shared.Assets;
+using Quaver.Shared.Helpers;
 using Steamworks;
 using Wobble;
 using Wobble.Logging;
@@ -22,6 +23,11 @@ namespace Quaver.Shared.Online
         ///     The application id for steam.
         /// </summary>
         public static uint ApplicationId => 980610;
+
+        /// <summary>
+        ///     The application for testing (spacewar)
+        /// </summary>
+        public static uint SpacewarId { get; } = 480;
 
         /// <summary>
         ///     Determines if steam is initialized or not.
@@ -69,6 +75,11 @@ namespace Quaver.Shared.Online
         ///     Called when receiving a persona state change from steam (for user avatars)
         /// </summary>
         private static Callback<PersonaStateChange_t> PersonaStateChanged { get; set; }
+
+        /// <summary>
+        ///     Called after calling ISteamUGC::CreateItem.
+        /// </summary>
+        private static CallResult<CreateItemResult_t> OnCreateItemResponse { get; set; }
 
         #endregion
 

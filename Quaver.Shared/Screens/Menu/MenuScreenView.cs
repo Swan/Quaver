@@ -34,6 +34,7 @@ using Quaver.Shared.Screens.Menu.UI.Tips;
 using Quaver.Shared.Screens.Menu.UI.Visualizer;
 using Quaver.Shared.Screens.Select;
 using Quaver.Shared.Screens.Settings;
+using Quaver.Shared.Screens.Workshop;
 using Wobble;
 using Wobble.Graphics;
 using Wobble.Graphics.Animations;
@@ -306,6 +307,17 @@ namespace Quaver.Shared.Screens.Menu
 
                     var screen = (QuaverScreen) Screen;
                     screen.Exit(() => new DownloadScreen());
+                }),
+                new ButtonText(FontsBitmap.GothamRegular, "Skins", 14, (sender, args) =>
+                {
+                    if (SteamManager.ApplicationId == SteamManager.SpacewarId)
+                    {
+                        NotificationManager.Show(NotificationLevel.Error, "You must be using the official client to download skins!");
+                        return;
+                    }
+
+                    var screen = (QuaverScreen) Screen;
+                    screen.Exit(() => new SteamWorkshopScreen());
                 }),
             }, new List<ButtonText>()
             {
