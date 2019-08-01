@@ -14,7 +14,7 @@
 
 **Quaver** is a community-driven and open-source competitve vertical scrolling rhythm game with two game modes and online leaderboards. It also features an in-game editor and a highly customizeable and advanced multiplayer mode.
 
-It is also being officially released on [Steam](https://store.steampowered.com/app/980610/Quaver/) for Windows and Linux - making it one of the most accessible community-driven vertical scrolling rhythm games of to date.
+It is also being officially released on [Steam](https://store.steampowered.com/app/980610/Quaver/) for Windows and Linux - making it one of the most accessible community-driven vertical scrolling rhythm games to date.
 
 ## Features
 
