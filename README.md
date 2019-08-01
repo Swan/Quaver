@@ -1,5 +1,5 @@
 <p align="center"> 
-  <img src="https://i.imgur.com/LGy1Zth.png" width="150px" height="150px">
+  <img src="https://i.imgur.com/AohWq5l.png">
 </p>
 
 # Quaver 
