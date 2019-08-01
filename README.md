@@ -24,7 +24,7 @@ Occasionally we open registrations where you can join the Steam alpha and get ex
 
 ## Features
 
-Although there are many games like this, **Quaver** offers many unique features and expands on the ideas of its predecessors that make it much different.
+Although there are many games like this, **Quaver** offers many unique features and expands on the ideas of its predecessors that make it much different. It is also heavily inspired by a variety of our favorite rhythm games.
 
 * **Two Game Modes** - Play the game with 4 keys or challenge yourself with 7. Each game mode has separate global and country leaderboards to compete on.
 
