@@ -12,6 +12,35 @@
 
 ## About 
 
+**Quaver** is a community-driven and open-source competitve vertical scrolling rhythm game with two game modes and online leaderboards. It also features an in-game editor and a highly customizeable and advanced multiplayer mode.
+
+It is also being officially released on [Steam](https://store.steampowered.com/app/980610/Quaver/) for Windows and Linux - making it one of the most accessible community-driven vertical scrolling rhythm games of to date.
+
+## Features
+
+Although there are many games like this, Quaver offers many unique features and expands on the ideas of its predecessors that make it much different.
+
+* **Two Game Modes** - Play the game with 4 keys or challenge yourself with 7. Each game mode has separate global and country leaderboards to compete on.
+
+* **Global & Country Leaderboards** - Compete with your country and the world for the highest scores and aim to be #1.
+
+* **Ranked & Casual Multiplayer** - Challenge up to 16 players in casual or competitive-oriented multiplayer battles. Multiplayer includes three game modes including Free-For-All, Teams, and Battle Royale
+
+* **Map Editor** - Create your own maps to any of your favorite songs. Upload and share them with the world, and submit them for official ranking.
+
+* **Advanced Skinning System** - Completely customize your gameplay experience with the ability to create skins. Export and share your skins with friends or upload them to the Steam workshop.
+
+* **Replays** - Go back in time by watching your previous scores. Watch replays from other players around the world, or export your own and share them with your rivals.
+
+* **Over 10+ Game Modifiers** - Switch up the way you play by activating in-game modifiers. Customize the speed of the song, get rid of all the long notes, or even randomize the entire map!
+
+* **Steam Achievements** - Become a master of Quaver by completing challenges and earning achievements!
+
+* **Play Maps From Other Games** - Coming from a different game and miss all of your favorite maps? Quaver supports both .osz and .sm files out of the box - with support for more games added in the future!
+
+* **Join a Growing Community** - This game is 100% community-driven and built from the ground up with players' feedback in mind.
+
+* **Anyone Can Contribute** - Submit feedback, discuss with the developers, and see your ideas come to life in-game.
 
 ### Table of Contents ###
 * [Requirements](https://github.com/Quaver/Quaver#requirements)
