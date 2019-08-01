@@ -18,7 +18,7 @@ It is also being officially released on [Steam](https://store.steampowered.com/a
 
 ## Features
 
-Although there are many games like this, Quaver offers many unique features and expands on the ideas of its predecessors that make it much different.
+Although there are many games like this, **Quaver** offers many unique features and expands on the ideas of its predecessors that make it much different.
 
 * **Two Game Modes** - Play the game with 4 keys or challenge yourself with 7. Each game mode has separate global and country leaderboards to compete on.
 
@@ -34,7 +34,7 @@ Although there are many games like this, Quaver offers many unique features and 
 
 * **Over 10+ Game Modifiers** - Switch up the way you play by activating in-game modifiers. Customize the speed of the song, get rid of all the long notes, or even randomize the entire map!
 
-* **Steam Achievements** - Become a master of Quaver by completing challenges and earning achievements!
+* **Steam Achievements** - Become a master of **Quaver** by completing challenges and earning achievements!
 
 * **Play Maps From Other Games** - Coming from a different game and miss all of your favorite maps? Quaver supports both .osz and .sm files out of the box - with support for more games added in the future!
 
