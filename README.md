@@ -10,7 +10,7 @@
 
 | [![steam](https://i.imgur.com/rR4p9mW.png)](https://store.steampowered.com/app/980610/Quaver/) | [![twitter](https://i.imgur.com/Kd0SXlh.png)](https://twitter.com/QuaverGame) | [![discord](https://i.imgur.com/YrBmbEf.png)](https://discord.gg/nJa8VFr) | [![blog](https://i.imgur.com/o0fq6MA.png)](https://blog.quavergame.com) | [![website](https://i.imgur.com/svZCnuI.png)](https://quavergame.com) | 
 | --- | --- | --- | --- | --- |
-| **Official Steam Store Page** | **Follow Us On Twitter** | **Join The Discord** | **Read The Developer Blog** | **Visit The Website** |
+| **Steam Store Page** | **Follow Us On Twitter** | **Join The Discord** | **Read The Developer Blog** | **Visit The Website** |
 
 ## About 
 
