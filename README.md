@@ -40,7 +40,7 @@ Although there are many games like this, **Quaver** offers many unique features 
 
 * **Steam Achievements** - Become a master of **Quaver** by completing challenges and earning achievements!
 
-* **Play Maps From Other Games** - Coming from a different game and miss all of your favorite maps? Quaver supports both .osz and .sm files out of the box - with support for more games added in the future!
+* **Play Maps From Other Games** - Coming from a different game and miss all of your favorite maps? Quaver supports both .osz and .sm files out of the box - with support for more games to be added in the future!
 
 * **Join a Growing Community** - This game is 100% community-driven and built from the ground up with players' feedback in mind.
 
