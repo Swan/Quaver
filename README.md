@@ -1,10 +1,10 @@
 # Quaver 
 
+[![Build Status](https://travis-ci.com/Quaver/Quaver.svg?branch=develop)](https://travis-ci.com/Quaver/Quaver) [![CodeFactor](https://www.codefactor.io/repository/github/swan/quaver/badge)](https://www.codefactor.io/repository/github/swan/quaver) [![Discord](https://discordapp.com/api/guilds/354206121386573824/widget.png?style=shield)](https://discord.gg/nJa8VFr)
+
 <p align="center"> 
   <img src="https://i.imgur.com/AohWq5l.png">
 </p>
-
-[![Build Status](https://travis-ci.com/Quaver/Quaver.svg?branch=develop)](https://travis-ci.com/Quaver/Quaver) [![CodeFactor](https://www.codefactor.io/repository/github/swan/quaver/badge)](https://www.codefactor.io/repository/github/swan/quaver) [![Discord](https://discordapp.com/api/guilds/354206121386573824/widget.png?style=shield)](https://discord.gg/nJa8VFr)
 
 | [![steam](https://i.imgur.com/rR4p9mW.png)](https://store.steampowered.com/app/980610/Quaver/) | [![twitter](https://i.imgur.com/Kd0SXlh.png)](https://twitter.com/QuaverGame) | [![discord](https://i.imgur.com/YrBmbEf.png)](https://discord.gg/nJa8VFr) | [![blog](https://i.imgur.com/o0fq6MA.png)](https://blog.quavergame.com) | [![website](https://i.imgur.com/svZCnuI.png)](https://quavergame.com) | 
 | --- | --- | --- | --- | --- |
