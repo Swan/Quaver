@@ -85,7 +85,7 @@ namespace Quaver.Shared.Screens.Gameplay.UI
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            Bindable.Value = Screen.Timing.Time / ModHelper.GetRateFromMods(ModManager.Mods);
+            Bindable.Value = AudioEngine.Track.Time / ModHelper.GetRateFromMods(ModManager.Mods);
 
             // Only update time each second.
             if (Screen.Timing.Time - TimeLastProgressChange < 1000)
@@ -94,7 +94,7 @@ namespace Quaver.Shared.Screens.Gameplay.UI
                 return;
             }
 
-            TimeLastProgressChange = Screen.Timing.Time;
+            TimeLastProgressChange = AudioEngine.Track.Time;
 
             // Set the time of the current time
             if (ConfigManager.DisplaySongTimeProgressNumbers.Value)

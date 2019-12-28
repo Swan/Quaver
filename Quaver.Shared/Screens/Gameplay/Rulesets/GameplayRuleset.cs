@@ -18,6 +18,7 @@ using Quaver.Shared.Config;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Online;
 using Quaver.Shared.Screens.Gameplay.Rulesets.HitObjects;
+using Quaver.Shared.Screens.Gameplay.Rulesets.Input;
 using Quaver.Shared.Screens.Gameplay.UI.Scoreboard;
 using WebSocketSharp;
 using Wobble.Logging;
@@ -60,14 +61,14 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets
         /// <summary>
         ///     Manages all the scoring for this play session and ruleset.
         /// </summary>
-        public ScoreProcessor ScoreProcessor { get; private set; }
+        public ScoreProcessor ScoreProcessor { get; set; }
 
         /// <summary>
         ///    Handles the *real* scoring values with standardized judgements.
         ///     <see cref="ScoreProcessor"/> can have custom windows. This is used
         ///     to calculate the player's real score
         /// </summary>
-        public VirtualReplayPlayer StandardizedReplayPlayer { get; }
+        public VirtualReplayPlayer StandardizedReplayPlayer { get; set; }
 
         /// <summary>
         ///
@@ -85,6 +86,15 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets
 
             StandardizedReplayPlayer = new VirtualReplayPlayer(new Replay(Map.Mode,
                 ConfigManager.Username.Value, ModManager.Mods, Screen.MapHash), map, null, true);
+
+            if (Screen.InReplayMode)
+            {
+                var inputManager = (KeysInputManager) InputManager;
+
+                StandardizedReplayPlayer.Replay.Frames = inputManager.ReplayInputManager.Replay.Frames;
+                StandardizedReplayPlayer.PlayAllFrames();
+               //  Console.WriteLine(StandardizedReplayPlayer.Replay.Frames.Count);
+            }
         }
 
         /// <inheritdoc />
@@ -122,8 +132,11 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets
         ///     Polls <see cref="ScoreProcessor"/> and updates <see cref="StandardizedReplayPlayer"/>
         ///     with the standardized scoring values
         /// </summary>
-        private void UpdateStandardizedScoreProcessor()
+        public void UpdateStandardizedScoreProcessor()
         {
+            if (Screen.InReplayMode)
+                return;
+
             if (Screen.ReplayCapturer.Replay.Frames.Count == StandardizedReplayPlayer.Replay.Frames.Count)
                 return;
 

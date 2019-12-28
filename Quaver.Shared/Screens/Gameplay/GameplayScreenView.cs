@@ -28,6 +28,7 @@ using Quaver.Shared.Helpers;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Online;
 using Quaver.Shared.Screens.Editor;
+using Quaver.Shared.Screens.Gameplay.Rulesets.Input;
 using Quaver.Shared.Screens.Gameplay.UI;
 using Quaver.Shared.Screens.Gameplay.UI.Counter;
 using Quaver.Shared.Screens.Gameplay.UI.Multiplayer;

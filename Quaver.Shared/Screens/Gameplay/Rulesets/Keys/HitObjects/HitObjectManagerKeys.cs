@@ -765,35 +765,50 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects
             CurrentTrackPosition = GetPositionFromTime(CurrentAudioPosition, CurrentSvIndex);
         }
 
+        public void DestroyAllObjects()
+        {
+            var playfield = (GameplayPlayfieldKeys)Ruleset.Playfield;
+
+            for (var i = playfield.Stage.HitObjectContainer.Children.Count - 1; i >= 0; i--)
+            {
+                playfield.Stage.HitObjectContainer.Children[i].Destroy();
+            }
+
+            playfield.Stage.HitObjectContainer.Children.Clear();
+
+            foreach (var lane in ActiveNoteLanes)
+            {
+                if (lane.Count == 0)
+                    continue;
+
+                lane.Dequeue().Destroy();
+            }
+
+            foreach (var lane in HeldLongNoteLanes)
+            {
+                if (lane.Count == 0)
+                    continue;
+
+                lane.Dequeue().Destroy();
+            }
+
+            foreach (var lane in DeadNoteLanes)
+            {
+                if (lane.Count == 0)
+                    continue;
+
+                lane.Dequeue().Destroy();
+            }
+        }
+
         /// <summary>
         ///     Handles skipping forward in the pool
         /// </summary>
         public void HandleSkip()
         {
-            ActiveNoteLanes.ForEach(x =>
-            {
-                if (x.Count == 0)
-                    return;
+            DestroyAllObjects();
 
-                x.Dequeue().Destroy();
-            });
-
-            DeadNoteLanes.ForEach(x =>
-            {
-                if (x.Count == 0)
-                    return;
-
-                x.Dequeue().Destroy();
-            });
-
-            HeldLongNoteLanes.ForEach(x =>
-            {
-                if (x.Count == 0)
-                    return;
-
-                x.Dequeue().Destroy();
-            });
-
+            CurrentSvIndex = 0;
             UpdateCurrentTrackPosition();
             InitializeInfoPool(Ruleset.Map, true);
             InitializeObjectPool();

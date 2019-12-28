@@ -13,8 +13,10 @@ using Quaver.API.Maps.Processors.Scoring.Data;
 using Quaver.API.Replays;
 using Quaver.API.Replays.Virtual;
 using Quaver.Shared.Audio;
+using Quaver.Shared.Config;
 using Quaver.Shared.Database.Judgements;
 using Quaver.Shared.Modifiers;
+using Quaver.Shared.Scheduling;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.Playfield;
 using Wobble.Logging;
@@ -56,7 +58,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
         /// <summary>
         ///     Virtually plays replay frames
         /// </summary>
-        public VirtualReplayPlayer VirtualPlayer { get; }
+        public VirtualReplayPlayer VirtualPlayer { get; set; }
 
         /// <summary>
         ///     The current frame being played in the virtual replay player
@@ -77,7 +79,6 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
                 : JudgementWindowsDatabaseCache.Selected.Value;
 
             VirtualPlayer = new VirtualReplayPlayer(Replay, Screen.Map, windows, Screen.SpectatorClient != null);
-
             VirtualPlayer.PlayAllFrames();
 
             // Populate unique key presses/releases.
@@ -91,8 +92,11 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
         /// <summary>
         ///     Determines which frame we are on in the replay and sets if it has unique key presses/releases.
         /// </summary>
-        internal void HandleInput()
+        internal void HandleInput(bool dontSkip = false)
         {
+            if (IsSkipping)
+                return;
+
             if (Screen.SpectatorClient != null)
                 VirtualPlayer.PlayAllFrames();
 
@@ -101,10 +105,10 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
             if (CurrentFrame >= Replay.Frames.Count || !(Manager.CurrentAudioPosition >= Replay.Frames[CurrentFrame].Time) || !Screen.InReplayMode)
                 return;
 
-            if (Math.Abs(Manager.CurrentAudioPosition - Replay.Frames[CurrentFrame].Time) >= 200)
+            if (!dontSkip && Math.Abs(Manager.CurrentAudioPosition - Replay.Frames[CurrentFrame].Time) >= 200)
             {
-                CurrentFrame = Replay.Frames.FindLastIndex(x => x.Time < AudioEngine.Track.Time);
-                Logger.Important($"Skipped to replay frame: {CurrentFrame}", LogType.Runtime);
+                //CurrentFrame = Replay.Frames.FindLastIndex(x => x.Time < AudioEngine.Track.Time);
+                // Logger.Important($"Skipped to replay frame: {CurrentFrame}", LogType.Runtime);
             }
 
             try
@@ -163,6 +167,9 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
 
         private void HandleScoring()
         {
+            if (IsSkipping)
+                return;
+
             if (VirtualPlayer.CurrentFrame < VirtualPlayer.Replay.Frames.Count)
                 VirtualPlayer.PlayAllFrames();
 
@@ -197,12 +204,41 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
 
         internal void HandleSkip()
         {
-            var frame = Replay.Frames.FindLastIndex(x => x.Time <= Manager.CurrentAudioPosition);
+            var time = AudioEngine.Track.Time;
+
+            var frame = Replay.Frames.FindLastIndex(x => x.Time < time);
 
             if (frame == -1)
                 return;
 
-            CurrentFrame = ModManager.IsActivated(ModIdentifier.Autoplay) ? frame + 1 : frame;
+            CurrentFrame = frame - 1;
+
+            if (CurrentFrame < 0)
+                CurrentFrame = 0;
+
+            UniquePresses.Clear();
+            UniqueReleases.Clear();
+
+            for (var i = 0; i < Screen.Map.GetKeyCount(); i++)
+            {
+                UniquePresses.Add(false);
+                UniqueReleases.Add(false);
+            }
+
+            HandleInput(false);
+            Screen.Ruleset.InputManager.HandleInput(0);
+
+            var windows = Screen.SpectatorClient != null
+                ? JudgementWindowsDatabaseCache.Standard
+                : JudgementWindowsDatabaseCache.Selected.Value;
+
+            CurrentVirtualReplayStat = -1;
+
+            Screen.Ruleset.ScoreProcessor = new ScoreProcessorKeys(Screen.Map, ModManager.Mods, windows);
+            //Screen.Ruleset.StandardizedReplayPlayer = new VirtualReplayPlayer(new Replay(Screen.Map.Mode,
+            //    ConfigManager.Username.Value, ModManager.Mods, Screen.MapHash), Screen.Map, null, true);
         }
+
+        public bool IsSkipping { get; set; }
     }
 }

@@ -54,6 +54,7 @@ using Wobble.Graphics.UI.Dialogs;
 using Wobble.Input;
 using Wobble.Logging;
 using Wobble.Screens;
+using Wobble.Window;
 using MathHelper = Microsoft.Xna.Framework.MathHelper;
 
 namespace Quaver.Shared.Screens.Gameplay
@@ -386,6 +387,8 @@ namespace Quaver.Shared.Screens.Gameplay
         /// </summary>
         public override void OnFirstUpdate()
         {
+            GameBase.Game.GlobalUserInterface.Cursor.Alpha = 1;
+
             var game = (QuaverGame) GameBase.Game;
             game.InitializeFpsLimiting();
 
@@ -434,6 +437,64 @@ namespace Quaver.Shared.Screens.Gameplay
             SendJudgementsToServer();
             SendReplayFramesToServer();
 
+            if (MouseManager.IsUniqueClick(MouseButton.Left))
+            {
+                var percentage = MouseManager.CurrentState.X / WindowManager.Width;
+
+                var hitobjectManager = (HitObjectManagerKeys) Ruleset.HitObjectManager;
+                hitobjectManager.DestroyAllObjects();
+
+                AudioEngine.Track.Seek(AudioEngine.Track.Length * percentage);
+                Console.WriteLine(AudioEngine.Track.Time);
+                Timing.Update(gameTime);
+
+                hitobjectManager.HandleSkip();
+
+                var inputManager = (KeysInputManager)Ruleset.InputManager;
+                inputManager.ReplayInputManager.HandleSkip();
+
+                // Stop all playing sound effects and move NextSoundEffectIndex ahead.
+                CustomAudioSampleCache.StopAll();
+                UpdateNextSoundEffectIndex();
+            }
+
+            if (InReplayMode)
+            {
+                if (KeyboardManager.IsUniqueKeyPress(Keys.Left))
+                {
+                    var hitobjectManager = (HitObjectManagerKeys) Ruleset.HitObjectManager;
+                    hitobjectManager.DestroyAllObjects();
+
+                    AudioEngine.Track.Seek(AudioEngine.Track.Time - 10000);
+                    Timing.Time = AudioEngine.Track.Time;
+
+                    hitobjectManager.HandleSkip();
+
+                    var inputManager = (KeysInputManager)Ruleset.InputManager;
+                    inputManager.ReplayInputManager.HandleSkip();
+
+                    // Stop all playing sound effects and move NextSoundEffectIndex ahead.
+                    CustomAudioSampleCache.StopAll();
+                    UpdateNextSoundEffectIndex();
+                }
+                else if (KeyboardManager.IsUniqueKeyPress(Keys.Right))
+                {
+                    var hitobjectManager = (HitObjectManagerKeys) Ruleset.HitObjectManager;
+                    hitobjectManager.DestroyAllObjects();
+
+                    AudioEngine.Track.Seek(AudioEngine.Track.Time + 10000);
+                    Timing.Time = AudioEngine.Track.Time;
+
+                    hitobjectManager.HandleSkip();
+
+                    var inputManager = (KeysInputManager)Ruleset.InputManager;
+                    inputManager.ReplayInputManager.HandleSkip();
+
+                    // Stop all playing sound effects and move NextSoundEffectIndex ahead.
+                    CustomAudioSampleCache.StopAll();
+                    UpdateNextSoundEffectIndex();
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -781,7 +842,7 @@ namespace Quaver.Shared.Screens.Gameplay
             screenView.PauseScreen?.Deactivate();
             SetRichPresence();
             OnlineManager.Client?.UpdateClientStatus(GetClientStatus());
-            GameBase.Game.GlobalUserInterface.Cursor.Alpha = 0;
+            GameBase.Game.GlobalUserInterface.Cursor.Alpha = 1;
         }
 
         /// <summary>
@@ -958,7 +1019,7 @@ namespace Quaver.Shared.Screens.Gameplay
         /// </summary>
         public void Retry()
         {
-            GameBase.Game.GlobalUserInterface.Cursor.Alpha = 0;
+            GameBase.Game.GlobalUserInterface.Cursor.Alpha = 1;
             SkinManager.Skin.SoundRetry.CreateChannel().Play();
             CustomAudioSampleCache.StopAll();
 
