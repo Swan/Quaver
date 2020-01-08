@@ -20,6 +20,7 @@ using Quaver.Shared.Scheduling;
 using Quaver.Shared.Screens.Loading;
 using Quaver.Shared.Screens.MultiplayerLobby;
 using Quaver.Shared.Screens.Select.UI.Modifiers;
+using Quaver.Shared.Screens.Tournament;
 using Wobble.Graphics.UI.Dialogs;
 using Wobble.Input;
 
@@ -144,22 +145,18 @@ namespace Quaver.Shared.Screens.Multiplayer
                 return;
             }
 
-            if (OnlineManager.CurrentGame.RefereeUserId == OnlineManager.Self.OnlineUser.Id)
-            {
-                NotificationManager.Show(NotificationLevel.Info, "Match started. Click to watch the match live on the web as a referee. ",
-                    (o, args) => BrowserHelper.OpenURL($"https://quavergame.com/multiplayer/game/{OnlineManager.CurrentGame.GameId}"));
+            MapManager.Selected.Value.Scores.Value = GetScoresFromMultiplayerUsers();
 
+            // Make sure map is absolutely correct before going to map loading screen.
+            view.Map.UpdateContent();
+
+            if (Game.IsSpectating || OnlineManager.CurrentGame.RefereeUserId == OnlineManager.Self.OnlineUser.Id)
+            {
+                Exit(() => new TournamentScreen(Game, OnlineManager.SpectatorClients.Values.ToList()));
                 return;
             }
 
-            MapManager.Selected.Value.Scores.Value = GetScoresFromMultiplayerUsers();
-            Exit(() =>
-            {
-                // Make sure map is absolutely correct before going to map loading screen.
-                view.Map.UpdateContent();
-
-                return new MapLoadingScreen(MapManager.Selected.Value.Scores.Value);
-            });
+            Exit(() => new MapLoadingScreen(MapManager.Selected.Value.Scores.Value));
         }
 
         /// <summary>

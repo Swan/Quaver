@@ -6,11 +6,14 @@ using Microsoft.Xna.Framework.Input;
 using Quaver.API.Helpers;
 using Quaver.API.Replays;
 using Quaver.Server.Common.Objects;
+using Quaver.Server.Common.Objects.Multiplayer;
+using Quaver.Shared.Audio;
 using Quaver.Shared.Config;
 using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Discord;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Online;
+using Quaver.Shared.Screens.Gameplay.Rulesets.Input;
 using Quaver.Shared.Screens.Loading;
 using Quaver.Shared.Screens.Tournament.Gameplay;
 using Wobble;
@@ -76,6 +79,8 @@ namespace Quaver.Shared.Screens.Tournament
             ModManager.AddSpeedMods(ModHelper.GetRateFromMods(replays.First().Mods));
 
             SetRichPresenceForTournamentViewer();
+
+            Console.WriteLine(MainGameplayScreen == null);
             View = new TournamentScreenView(this);
         }
 
@@ -109,6 +114,43 @@ namespace Quaver.Shared.Screens.Tournament
             View = new TournamentScreenView(this);
         }
 
+        /// <summary>
+        ///     Tournament screen for multiplayer (spectator)
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="spectatees"></param>
+        public TournamentScreen(MultiplayerGame game, IReadOnlyList<SpectatorClient> spectatees)
+        {
+            TournamentType = TournamentScreenType.Spectator;
+
+            GameplayScreens = new List<TournamentGameplayScreen>();
+
+            for (var i = 0; i < spectatees.Count; i++)
+            {
+                var qua = MapManager.Selected.Value.LoadQua();
+
+                var mods = OnlineManager.GetUserActivatedMods(spectatees[i].Player.OnlineUser.Id, game);
+                qua.ApplyMods(mods);
+
+                MapManager.Selected.Value.Qua = qua;
+
+                if (spectatees[i].Replay == null)
+                {
+                    spectatees[i].Replay = new Replay(qua.Mode, spectatees[i].Player.OnlineUser.Username, mods,
+                        MapManager.Selected.Value.Md5Checksum);
+                }
+
+                var screen = new TournamentGameplayScreen(qua, MapManager.Selected.Value.GetAlternativeMd5(), spectatees[i]);
+
+                if (GameplayScreens.Count == 0)
+                    MainGameplayScreen = screen;
+
+                GameplayScreens.Add(screen);
+            }
+
+            View = new TournamentScreenView(this);
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -129,19 +171,22 @@ namespace Quaver.Shared.Screens.Tournament
                 UpdateScreens(gameTime);
 
                 if (KeyboardManager.CurrentState.IsKeyDown(ConfigManager.KeyPause.Value))
-                    MainGameplayScreen.Pause(gameTime, false);
+                    MainGameplayScreen?.Pause(gameTime, false);
 
-                switch (MainGameplayScreen.Type)
+                if (MainGameplayScreen != null)
                 {
-                    case TournamentScreenType.Spectator:
-                        break;
-                    case TournamentScreenType.Coop:
-                    case TournamentScreenType.Replay:
-                        if (MainGameplayScreen.EligibleToSkip && KeyboardManager.IsUniqueKeyPress(ConfigManager.KeySkipIntro.Value))
-                            MainGameplayScreen.SkipToNextObject();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    switch (MainGameplayScreen?.Type)
+                    {
+                        case TournamentScreenType.Spectator:
+                            break;
+                        case TournamentScreenType.Coop:
+                        case TournamentScreenType.Replay:
+                            if (MainGameplayScreen.EligibleToSkip && KeyboardManager.IsUniqueKeyPress(ConfigManager.KeySkipIntro.Value))
+                                MainGameplayScreen?.SkipToNextObject();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
 
@@ -169,8 +214,46 @@ namespace Quaver.Shared.Screens.Tournament
         /// <param name="gameTime"></param>
         private void UpdateScreens(GameTime gameTime)
         {
+            HandleSpectator();
+
             foreach (var screen in GameplayScreens)
-                screen.Update(gameTime);
+                screen?.Update(gameTime);
+        }
+
+        /// <summary>
+        /// </summary>
+        private void HandleSpectator()
+        {
+            if (TournamentType != TournamentScreenType.Spectator)
+                return;
+
+            var hasNoFrames = false;
+
+            foreach (var screen in GameplayScreens)
+            {
+                var inputManager = (KeysInputManager) screen.Ruleset.InputManager;
+
+                if (inputManager?.ReplayInputManager?.CurrentFrame >= screen?.LoadedReplay?.Frames?.Count)
+                {
+                    hasNoFrames = true;
+                    break;
+                }
+            }
+
+            if (!hasNoFrames && AudioEngine.Track.IsPaused)
+                AudioEngine.Track.Play();
+            else if (hasNoFrames && AudioEngine.Track.IsPlaying)
+                AudioEngine.Track.Pause();
+
+            foreach (var screen in GameplayScreens)
+            {
+                var inputManager = (KeysInputManager) screen.Ruleset.InputManager;
+
+                if (!hasNoFrames)
+                    inputManager.ReplayInputManager.VirtualPlayer.PlayAllFrames();
+
+                screen.IsPaused = hasNoFrames;
+            }
         }
 
         /// <inheritdoc />

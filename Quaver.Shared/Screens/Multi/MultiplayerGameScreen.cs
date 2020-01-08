@@ -22,6 +22,7 @@ using Quaver.Shared.Screens.Loading;
 using Quaver.Shared.Screens.MultiplayerLobby;
 using Quaver.Shared.Screens.Selection;
 using Quaver.Shared.Screens.Selection.UI;
+using Quaver.Shared.Screens.Tournament;
 using Wobble.Bindables;
 using Wobble.Graphics.UI.Dialogs;
 using Wobble.Input;
@@ -184,16 +185,14 @@ namespace Quaver.Shared.Screens.Multi
                 return;
             }
 
-            // User is a referee, so don't start for them
-            if (OnlineManager.CurrentGame.RefereeUserId == OnlineManager.Self.OnlineUser.Id)
-            {
-                NotificationManager.Show(NotificationLevel.Info, "Match started. Click to watch the match live on the web as a referee. ",
-                    (o, args) => BrowserHelper.OpenURL($"https://quavergame.com/multiplayer/game/{OnlineManager.CurrentGame.GameId}"));
+            DontLeaveGameUponScreenSwitch = true;
 
+            if (Game.Value.IsSpectating || OnlineManager.CurrentGame.RefereeUserId == OnlineManager.Self.OnlineUser.Id)
+            {
+                Exit(() => new TournamentScreen(Game.Value, OnlineManager.SpectatorClients.Values.ToList()));
                 return;
             }
 
-            DontLeaveGameUponScreenSwitch = true;
             Exit(() => new MapLoadingScreen(GetScoresFromMultiplayerUsers()));
         }
 

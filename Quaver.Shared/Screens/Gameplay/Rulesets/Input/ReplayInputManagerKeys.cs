@@ -17,6 +17,7 @@ using Quaver.Shared.Database.Judgements;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.HitObjects;
 using Quaver.Shared.Screens.Gameplay.Rulesets.Keys.Playfield;
+using Quaver.Shared.Screens.Tournament.Gameplay;
 using Wobble.Logging;
 
 namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
@@ -140,7 +141,10 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
         /// </summary>
         public void HandleSpectating()
         {
-            if (Screen.SpectatorClient == null)
+            /*if (Screen.SpectatorClient == null)
+                return;
+
+            if (Screen is TournamentGameplayScreen)
                 return;
 
             if (CurrentFrame >= Replay.Frames.Count)
@@ -159,7 +163,7 @@ namespace Quaver.Shared.Screens.Gameplay.Rulesets.Input
                 Screen.IsPaused = false;
 
             if (AudioEngine.Track.IsPaused)
-                AudioEngine.Track.Play();
+                AudioEngine.Track.Play();*/
         }
 
         private void HandleScoring()

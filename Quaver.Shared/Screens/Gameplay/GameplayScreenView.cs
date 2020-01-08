@@ -38,6 +38,7 @@ using Quaver.Shared.Screens.Multiplayer;
 using Quaver.Shared.Screens.Result;
 using Quaver.Shared.Screens.Select;
 using Quaver.Shared.Screens.Selection;
+using Quaver.Shared.Screens.Tournament.Gameplay;
 using Quaver.Shared.Skinning;
 using Steamworks;
 using Wobble;
@@ -675,7 +676,7 @@ namespace Quaver.Shared.Screens.Gameplay
         /// <param name="gameTime"></param>
         private void HandlePlayCompletion(GameTime gameTime)
         {
-            if (!Screen.Failed && !Screen.IsPlayComplete || Screen.Exiting || Screen.IsSongSelectPreview)
+            if (!Screen.Failed && !Screen.IsPlayComplete || Screen.Exiting || Screen.IsSongSelectPreview || Screen is TournamentGameplayScreen)
                 return;
 
             Screen.TimeSincePlayEnded += gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -824,6 +825,9 @@ namespace Quaver.Shared.Screens.Gameplay
         /// <param name="e"></param>
         private void OnGameEnded(object sender, GameEndedEventArgs e)
         {
+            if (Screen is TournamentGameplayScreen)
+                return;
+
             Screen.IsPaused = true;
 
             var screen = new MultiplayerScreen(OnlineManager.CurrentGame, true);

@@ -24,6 +24,7 @@ namespace Quaver.Shared.Screens.MultiplayerLobby.UI.Dialogs
             "Connecting to multiplayer game. Please wait...", Load(game, password, isCreating))
         {
             OnlineManager.Client.OnJoinedMultiplayerGame += OnJoinedMultiplayerGame;
+            OnlineManager.Client.OnSpectateMultiplayerGame += OnSpectateMultiplayerGame;
             OnlineManager.Client.OnJoinGameFailed += OnJoinGameFailed;
         }
 
@@ -33,6 +34,7 @@ namespace Quaver.Shared.Screens.MultiplayerLobby.UI.Dialogs
         public override void Destroy()
         {
             OnlineManager.Client.OnJoinedMultiplayerGame -= OnJoinedMultiplayerGame;
+            OnlineManager.Client.OnSpectateMultiplayerGame -= OnSpectateMultiplayerGame;
             OnlineManager.Client.OnJoinGameFailed -= OnJoinGameFailed;
             WaitingOnResponse = false;
 
@@ -73,6 +75,16 @@ namespace Quaver.Shared.Screens.MultiplayerLobby.UI.Dialogs
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnJoinedMultiplayerGame(object sender, JoinedGameEventArgs e)
+        {
+            WaitingOnResponse = false;
+            Close();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSpectateMultiplayerGame(object sender, SpectateMultiplayerGameEventArgs e)
         {
             WaitingOnResponse = false;
             Close();

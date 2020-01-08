@@ -44,9 +44,13 @@ namespace Quaver.Shared.Screens.Tournament
         public TournamentScreenView(Screen screen) : base(screen)
         {
             CreateBackground();
-            SetPlayfieldPositions();
-            PositionPlayfieldItems();
-            CreateUsernames();
+
+            Container.ScheduleUpdate(() =>
+            {
+                SetPlayfieldPositions();
+                PositionPlayfieldItems();
+                CreateUsernames();
+            });
         }
 
         /// <inheritdoc />
@@ -61,8 +65,11 @@ namespace Quaver.Shared.Screens.Tournament
             if (!TournamentScreen.Exiting)
                 UpdatePlayfields(gameTime);
 
-            UpdateProgressBar(gameTime);
-            UpdateSkipDisplay(gameTime);
+            if (TournamentScreen.TournamentType != TournamentScreenType.Spectator)
+            {
+                UpdateProgressBar(gameTime);
+                UpdateSkipDisplay(gameTime);
+            }
         }
 
         /// <inheritdoc />
@@ -76,8 +83,12 @@ namespace Quaver.Shared.Screens.Tournament
             Container?.Draw(gameTime);
             Background?.Draw(gameTime);
             DrawPlayfields(gameTime);
-            DrawProgressBar(gameTime);
-            DrawSkipDisplay(gameTime);
+
+            if (TournamentScreen.TournamentType != TournamentScreenType.Spectator)
+            {
+                DrawProgressBar(gameTime);
+                DrawSkipDisplay(gameTime);
+            }
         }
 
         /// <inheritdoc />
@@ -226,7 +237,8 @@ namespace Quaver.Shared.Screens.Tournament
         /// <param name="gameTime"></param>
         private void DrawSkipDisplay(GameTime gameTime)
         {
-            if (TournamentScreen.MainGameplayScreen.Type != TournamentScreenType.Coop
+            if (TournamentScreen.TournamentType != TournamentScreenType.Spectator &&
+                TournamentScreen.MainGameplayScreen.Type != TournamentScreenType.Coop
                 && TournamentScreen.MainGameplayScreen.Type != TournamentScreenType.Replay)
             {
                 return;
@@ -252,11 +264,12 @@ namespace Quaver.Shared.Screens.Tournament
         /// <param name="gameTime"></param>
         private void DrawProgressBar(GameTime gameTime)
         {
-            if (TournamentScreen.MainGameplayScreen.Type != TournamentScreenType.Coop)
+            if (TournamentScreen?.MainGameplayScreen?.Type != TournamentScreenType.Coop
+                && TournamentScreen?.TournamentType != TournamentScreenType.Spectator)
                 return;
 
-            var view = (GameplayScreenView) TournamentScreen.MainGameplayScreen.View;
-            view.ProgressBar?.Draw(gameTime);
+            var view = (GameplayScreenView) TournamentScreen?.MainGameplayScreen?.View;
+            view?.ProgressBar?.Draw(gameTime);
         }
     }
 }

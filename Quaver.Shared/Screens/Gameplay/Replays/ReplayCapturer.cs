@@ -73,7 +73,7 @@ namespace Quaver.Shared.Screens.Gameplay.Replays
         /// <param name="gameTime"></param>
         public void Capture(GameTime gameTime)
         {
-            if (Screen.IsPaused || !ShouldCapture)
+            if (Screen.IsPaused || !ShouldCapture || Screen.IsPlayComplete)
                 return;
 
             // If we're in replay mode, we don't want to capture a completely new replay, as that can cause

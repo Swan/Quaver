@@ -364,6 +364,9 @@ namespace Quaver.Shared.Screens.Gameplay
 
             if (IsMultiplayerGame)
             {
+                if (SpectatorClient != null)
+                    IsMultiplayerGameStarted = true;
+
                 OnlineManager.Client.OnUserJoinedGame += OnUserJoinedGame;
                 OnlineManager.Client.OnUserLeftGame += OnUserLeftGame;
                 OnlineManager.Client.OnAllPlayersLoaded += OnAllPlayersLoaded;
@@ -1175,6 +1178,9 @@ namespace Quaver.Shared.Screens.Gameplay
         /// </summary>
         private void HandleSpectatorSkipping()
         {
+            if (this is TournamentGameplayScreen)
+                return;
+
             if (SpectatorClient.Replay.Frames.Count == 0)
                 return;
 
