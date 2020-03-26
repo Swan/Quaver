@@ -29,9 +29,11 @@ using Quaver.Shared.Screens.Edit.UI.Footer;
 using Quaver.Shared.Screens.Edit.UI.Playfield.Lines;
 using Quaver.Shared.Screens.Edit.UI.Playfield.Seek;
 using Quaver.Shared.Screens.Edit.UI.Playfield.Timeline;
+using Quaver.Shared.Screens.Edit.UI.Playfield.Waveforms;
 using Quaver.Shared.Screens.Edit.UI.Playfield.Zoom;
 using Quaver.Shared.Screens.Editor.UI.Rulesets.Keys;
 using Quaver.Shared.Skinning;
+using TagLib.Riff;
 using Wobble;
 using Wobble.Audio.Tracks;
 using Wobble.Bindables;
@@ -60,7 +62,7 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
 
         /// <summary>
         /// </summary>
-        private IAudioTrack Track { get; }
+        public IAudioTrack Track { get; }
 
         /// <summary>
         /// </summary>
@@ -178,6 +180,10 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
         ///     The index of the last object that was added to the pool
         /// </summary>
         private int LastPooledHitObjectIndex { get; set; } = -1;
+
+        /// <summary>
+        /// </summary>
+        private DrawablePlayfieldWaveform Waveform { get; set; }
 
         /// <summary>
         /// </summary>
@@ -302,6 +308,7 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
             CreateButton();
             CreateSeekBar();
             CreateZoom();
+            CreateWaveform();
 
             InitializeHitObjectPool();
             Track.Seeked += OnTrackSeeked;
@@ -330,6 +337,7 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
             UpdateHitObjectPool();
             Timeline.Update(gameTime);
             LineContainer.Update(gameTime);
+            Waveform.Update(gameTime);
             HandleInput();
 
             base.Update(gameTime);
@@ -355,6 +363,7 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
             var transformMatrix = Matrix.CreateTranslation(0, TrackPositionY, 0) * WindowManager.Scale;
 
             GameBase.Game.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transformMatrix);
+            Waveform.Draw(gameTime);
             Timeline.Draw(gameTime);
             LineContainer.Draw(gameTime);
             DrawHitObjects(gameTime);
@@ -376,6 +385,7 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
                 HitObjects.ForEach(x => x.Destroy());
                 Timeline?.Destroy();
                 LineContainer?.Destroy();
+                Waveform.Destroy();
             });
 
             Track.Seeked -= OnTrackSeeked;
@@ -436,6 +446,10 @@ namespace Quaver.Shared.Screens.Edit.UI.Playfield
                 });
             }
         }
+
+        /// <summary>
+        /// </summary>
+        private void CreateWaveform() => Waveform = new DrawablePlayfieldWaveform(this);
 
         /// <summary>
         /// </summary>
