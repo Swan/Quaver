@@ -18,6 +18,8 @@ using Quaver.Shared.Config;
 using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Database.Playlists;
 using Quaver.Shared.Scheduling;
+using Quaver.Shared.Screens.Selection.UI.Mapsets;
+using Quaver.Shared.Window;
 using Wobble;
 using Wobble.Assets;
 using Wobble.Graphics;
@@ -427,14 +429,15 @@ namespace Quaver.Shared.Graphics.Backgrounds
                 GameBase.Game.SpriteBatch.End();
 
                 // Cache a smaller version of the texture to a RenderTarget
-                var size = new ScalableVector2(421, 82);
+                var size = new ScalableVector2(DrawableBanner.WIDTH, 82);
                 var scrollContainer = new ScrollContainer(size, size);
 
+                var maskSize = QuaverWindowManager.Ratio != AspectRatio.Standard ? new ScalableVector2(448, 252) : size;
                 var maskedSprite = new Sprite
                 {
                     Alignment = Alignment.MidCenter,
                     // Small 16:9 resolution size to make backgrounds look a bit better and zoomed out
-                    Size = new ScalableVector2(448, 252),
+                    Size = maskSize,
                     Image = mipmapped
                 };
 
@@ -476,6 +479,21 @@ namespace Quaver.Shared.Graphics.Backgrounds
                     BannerLoaded?.Invoke(typeof(BackgroundHelper), new BannerLoadedEventArgs(playlist, renderTarget));
                 }
             });
+        }
+
+        /// <summary>
+        /// </summary>
+        public static void Dispose()
+        {
+            foreach (var banner in MapsetBanners)
+                banner.Value.Dispose();
+
+            MapsetBanners.Clear();
+
+            foreach (var banner in PlaylistBanners)
+                banner.Value.Dispose();
+
+            PlaylistBanners.Clear();
         }
     }
 }
