@@ -43,6 +43,8 @@ namespace Quaver.Shared.Screens.Options.Items.Custom
 
                 var split = args.Item.Text.Text.Split("x");
 
+                var ratio = QuaverWindowManager.Ratio;
+
                 if (ConfigManager.WindowWidth != null)
                 {
                     ConfigManager.WindowWidth.Value = int.Parse(split[0]);
@@ -50,7 +52,7 @@ namespace Quaver.Shared.Screens.Options.Items.Custom
                 }
 
                 var game = GameBase.Game as QuaverGame;
-                game?.ChangeResolution();
+                game?.ChangeResolution(ratio);
             };
         }
 
@@ -68,13 +70,10 @@ namespace Quaver.Shared.Screens.Options.Items.Custom
 
             foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
             {
-                if (mode.AspectRatio >= 1.5 && mode.AspectRatio <= 2.4)
-                {
-                    var option = $"{mode.Width}x{mode.Height}";
+                var option = $"{mode.Width}x{mode.Height}";
 
-                    if (!options.Contains(option))
-                        options.Add(option);
-                }
+                if (!options.Contains(option))
+                    options.Add(option);
             }
 
             options = options.OrderBy(x => int.Parse(x.Split("x")[0])).ToList();
