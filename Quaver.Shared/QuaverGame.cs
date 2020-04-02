@@ -808,7 +808,7 @@ namespace Quaver.Shared
 
         /// <summary>
         /// </summary>
-        public void ChangeResolution()
+        public void ChangeResolution(AspectRatio previous = AspectRatio.Widescreen)
         {
             if (!QuaverWindowManager.CanChangeResolutionOnScene)
                 return;
@@ -817,14 +817,14 @@ namespace Quaver.Shared
 
             switch (QuaverWindowManager.Ratio)
             {
-                case AspectRatio.Widescreen:
-                    WindowManager.ChangeVirtualScreenSize(new Vector2(1920, 1080));
-                    break;
                 case AspectRatio.Ultrawide:
                     WindowManager.ChangeVirtualScreenSize(new Vector2(2560, 1080));
                     break;
+                case AspectRatio.Standard:
+                    WindowManager.ChangeVirtualScreenSize(new Vector2(1440, 1080));
+                    break;
                 case AspectRatio.SixteenByTen:
-                    WindowManager.ChangeVirtualScreenSize(new Vector2(1920, 1080));
+                    WindowManager.ChangeVirtualScreenSize(new Vector2(1728, 1080));
                     break;
                 default:
                     WindowManager.ChangeVirtualScreenSize(new Vector2(1920, 1080));
@@ -833,6 +833,10 @@ namespace Quaver.Shared
 
             if (CurrentScreen == null)
                 return;
+
+            // Dispose of all banners because they need to be re-cached
+            if (previous != QuaverWindowManager.Ratio)
+                BackgroundHelper.Dispose();
 
             switch (CurrentScreen?.Type)
             {

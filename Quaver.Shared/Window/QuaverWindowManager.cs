@@ -16,6 +16,9 @@ namespace Quaver.Shared.Window
 {
     public static class QuaverWindowManager
     {
+        /// <summary>
+        ///     Returns the aspect ratio of the window
+        /// </summary>
         public static AspectRatio Ratio
         {
             get
@@ -33,7 +36,8 @@ namespace Quaver.Shared.Window
                 {
                     widescreen,
                     ultrawide,
-                    sixteenBy10
+                    sixteenBy10,
+                    standard
                 };
 
                 var closestRatio = vals.Min();
@@ -52,6 +56,9 @@ namespace Quaver.Shared.Window
             }
         }
 
+        /// <summary>
+        ///     Returns if the user can change the resolution on the current screen
+        /// </summary>
         public static bool CanChangeResolutionOnScene
         {
             get
@@ -76,5 +83,10 @@ namespace Quaver.Shared.Window
                 return false;
             }
         }
+
+        /// <summary>
+        ///     Returns if the screen resolution is widescreen
+        /// </summary>
+        public static bool IsWidescreen => Ratio != AspectRatio.Standard && Ratio != AspectRatio.SixteenByTen;
     }
 }
