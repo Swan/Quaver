@@ -20,8 +20,9 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.Dropdowns
         /// <summary>
         /// </summary>
         /// <param name="availableMapsets"></param>
-        public FilterDropdownMode(Bindable<List<Mapset>> availableMapsets) : base("MODE: ", 22, new Dropdown(GetDropdownItems(),
-            new ScalableVector2(120, 38), 22, ColorHelper.HexToColor($"#55ec49"), GetSelectedIndex()))
+        public FilterDropdownMode(Bindable<List<Mapset>> availableMapsets) : base("MODE: ", SelectFilterPanel.DropdownFontSize,
+            new Dropdown(GetDropdownItems(), new ScalableVector2(120, 38), SelectFilterPanel.DropdownFontSize,
+                ColorHelper.HexToColor($"#55ec49"), GetSelectedIndex(), 0, 0, true))
         {
             AvailableMapsets = availableMapsets;
             Dropdown.ItemSelected += OnItemSelected;

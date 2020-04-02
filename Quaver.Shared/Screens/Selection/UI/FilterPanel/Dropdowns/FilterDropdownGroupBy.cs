@@ -26,8 +26,9 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.Dropdowns
         /// <summary>
         /// </summary>
         /// <param name="availableMapsets"></param>
-        public FilterDropdownGroupBy(Bindable<List<Mapset>> availableMapsets) : base("GROUP BY: ", 22, new Dropdown(GetDropdownItems(),
-            new ScalableVector2(125, 38), 22, ColorHelper.HexToColor($"#10C8F6"), GetSelectedIndex()))
+        public FilterDropdownGroupBy(Bindable<List<Mapset>> availableMapsets) : base("GROUP BY: ", SelectFilterPanel.DropdownFontSize,
+            new Dropdown(GetDropdownItems(), new ScalableVector2(125, 38), SelectFilterPanel.DropdownFontSize,
+                ColorHelper.HexToColor($"#10C8F6"), GetSelectedIndex(), 0, 0, true))
         {
             AvailableMapsets = availableMapsets;
             Dropdown.ItemSelected += OnItemSelected;
