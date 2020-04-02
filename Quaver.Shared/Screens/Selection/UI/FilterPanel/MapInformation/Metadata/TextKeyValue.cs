@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 using Quaver.Shared.Assets;
+using Quaver.Shared.Helpers;
+using Quaver.Shared.Window;
 using Wobble.Graphics;
 using Wobble.Graphics.Animations;
 using Wobble.Graphics.Sprites;
@@ -36,10 +38,10 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation.Metadata
         /// <param name="value"></param>
         /// <param name="fontSize"></param>
         /// <param name="keyColor"></param>
-        public TextKeyValue(string key, string value, int fontSize, Color keyColor)
+        public TextKeyValue(string key, string value, int? fontSize = null, Color? keyColor = null)
         {
-            FontSize = fontSize;
-            KeyColor = keyColor;
+            FontSize = fontSize ?? (QuaverWindowManager.IsWidescreen ? 20 : 18);
+            KeyColor = keyColor ?? ColorHelper.HexToColor($"#ffe76b");
 
             CreateKey(key);
             CreateValue(value);

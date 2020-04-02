@@ -9,6 +9,7 @@ using Quaver.Shared.Graphics;
 using Quaver.Shared.Helpers;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation.Metadata;
+using Quaver.Shared.Window;
 using Wobble.Bindables;
 using Wobble.Graphics;
 using Wobble.Graphics.Sprites;
@@ -51,6 +52,10 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation
 
         private FilterMetadataNotesPerSecond NotesPerSecond { get; set; }
 
+        private int SpacingY => QuaverWindowManager.IsWidescreen ? 8 : 10;
+
+        private int FontSize => QuaverWindowManager.IsWidescreen ? 20 : 18;
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -88,7 +93,7 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation
         /// </summary>
         private void CreateArtistTitleText()
         {
-            ArtistTitle = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "Artist - Title", 20);
+            ArtistTitle = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "Artist - Title", FontSize);
 
             AddContainedDrawable(ArtistTitle);
         }
@@ -98,9 +103,9 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation
         /// </summary>
         private void CreateDifficultyModsText()
         {
-            DifficultyMods = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "[Difficulty] + Mods", 20)
+            DifficultyMods = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "[Difficulty] + Mods", FontSize)
             {
-                Y = ArtistTitle.Height + 8,
+                Y = ArtistTitle.Height + SpacingY,
             };
 
             AddContainedDrawable(DifficultyMods);
@@ -113,7 +118,7 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation
             GameMode = new FilterMetadataGameMode
             {
                 Parent = this,
-                Y = DifficultyMods.Y + DifficultyMods.Height + 8,
+                Y = DifficultyMods.Y + DifficultyMods.Height + SpacingY,
                 X = ArtistTitle.X
             };
 
