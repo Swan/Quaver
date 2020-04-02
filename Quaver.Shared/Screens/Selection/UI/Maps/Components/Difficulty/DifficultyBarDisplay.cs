@@ -1,6 +1,7 @@
 using Quaver.Shared.Assets;
 using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Modifiers;
+using Quaver.Shared.Window;
 using Wobble.Graphics;
 using Wobble.Graphics.Animations;
 using Wobble.Graphics.Sprites;
@@ -29,9 +30,11 @@ namespace Quaver.Shared.Screens.Selection.UI.Maps.Components.Difficulty
         /// <param name="halfSize"></param>
         public DifficultyBarDisplay(Map map, bool displayBackground = true, bool halfSize = false)
         {
+            var scale = QuaverWindowManager.IsWidescreen ? 1f : 0.75f;
+
             Map = map;
             Image = UserInterface.DifficultyBarBackground;
-            Size = halfSize ? new ScalableVector2(352, 21) : new ScalableVector2(704, 42);
+            Size = halfSize ? new ScalableVector2(352 * scale, 21 * scale) : new ScalableVector2(704, 42);
             Alpha = displayBackground ? 1 : 0;
 
             Container = new ScrollContainer(new ScalableVector2(0, Height), Size)
