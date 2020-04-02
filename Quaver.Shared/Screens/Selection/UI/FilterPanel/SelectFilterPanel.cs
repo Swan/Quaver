@@ -16,6 +16,7 @@ using Quaver.Shared.Scheduling;
 using Quaver.Shared.Screens.Selection.UI.FilterPanel.Dropdowns;
 using Quaver.Shared.Screens.Selection.UI.FilterPanel.MapInformation;
 using Quaver.Shared.Screens.Selection.UI.FilterPanel.Search;
+using Quaver.Shared.Window;
 using Wobble.Bindables;
 using Wobble.Graphics;
 using Wobble.Graphics.Sprites;
@@ -91,6 +92,10 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel
         ///     Task used to filter mapsets
         /// </summary>
         private TaskHandler<int, int> FilterMapsetsTask { get; }
+
+        /// <summary>
+        /// </summary>
+        public static int DropdownFontSize => QuaverWindowManager.IsWidescreen ? 22 : 20;
 
         /// <summary>
         /// </summary>
