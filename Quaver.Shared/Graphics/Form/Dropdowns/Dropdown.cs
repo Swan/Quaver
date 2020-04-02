@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Quaver.Shared.Assets;
 using Quaver.Shared.Screens.Options.Search;
@@ -99,6 +100,10 @@ namespace Quaver.Shared.Graphics.Form.Dropdowns
         /// </summary>
         private int MaxHeight { get; }
 
+        /// <summary>
+        /// </summary>
+        private bool AutoSize { get; }
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -109,7 +114,7 @@ namespace Quaver.Shared.Graphics.Form.Dropdowns
         /// <param name="selectedIndex"></param>
         /// <param name="maxWidth"></param>
         public Dropdown(List<string> options, ScalableVector2 size, int fontSize, Color? color = null, int selectedIndex = 0,
-            int maxWidth = 0, int maxHeight = 0)
+            int maxWidth = 0, int maxHeight = 0, bool auto = false)
             : base(UserInterface.DropdownClosed)
         {
             Options = options;
@@ -118,6 +123,7 @@ namespace Quaver.Shared.Graphics.Form.Dropdowns
             FontSize = fontSize;
             MaxWidth = maxWidth;
             MaxHeight = maxHeight;
+            AutoSize = auto;
 
             if (Options == null || Options.Count == 0)
                 throw new InvalidOperationException("You cannot create a dropdown with zero elements");
@@ -131,6 +137,31 @@ namespace Quaver.Shared.Graphics.Form.Dropdowns
             CreateDividerLine();
             CreateItemContainer();
             CreateItems();
+
+            if (AutoSize)
+            {
+                Width = Items.Max(x => x.Text.Width) + Chevron.Width + Items.First().Text.X + 24;
+                Height = Items.Max(x => x.Text.Height) + 16;
+
+                for (var i = 0; i < Items.Count; i++)
+                {
+                    var x = Items[i];
+
+                    x.Width = Width;
+                    x.Height = Height;
+                    x.Y = i * x.Height;
+                }
+
+                DividerLine.Width = Width;
+                DividerLine.Y = Items.First().Height;
+
+                HoverSprite.Width = Width;
+                HoverSprite.Height = Height;
+
+                ItemContainer.Width = Width;
+                ItemContainer.ContentContainer.Width = Width;
+                ItemContainer.ContentContainer.Height = Items.Count * Height;
+            }
 
             Hovered += OnHovered;
             LeftHover += OnHoverLeft;
