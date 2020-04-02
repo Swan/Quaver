@@ -9,6 +9,7 @@ using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Database.Playlists;
 using Quaver.Shared.Graphics.Backgrounds;
 using Quaver.Shared.Scheduling;
+using Quaver.Shared.Window;
 using Wobble;
 using Wobble.Assets;
 using Wobble.Bindables;
@@ -52,6 +53,19 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
         /// <summary>
         /// </summary>
         public static float DeselectedAlpha { get; } = 0.75f;
+
+        /// <summary>
+        /// </summary>
+        public static float WIDTH
+        {
+            get
+            {
+                if (QuaverWindowManager.Ratio == AspectRatio.Standard)
+                    return (16 / 9f) * DrawableMapset.CONTAINER_HEIGHT;
+
+                return 421;
+            }
+        }
 
         /// <summary>
         /// </summary>

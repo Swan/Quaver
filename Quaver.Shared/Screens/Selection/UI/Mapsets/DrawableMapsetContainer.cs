@@ -11,6 +11,7 @@ using Quaver.Shared.Helpers;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Screens.Selection.UI.Maps;
 using Quaver.Shared.Skinning;
+using Quaver.Shared.Window;
 using Wobble;
 using Wobble.Assets;
 using Wobble.Graphics;
@@ -97,13 +98,17 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
 
         /// <summary>
         /// </summary>
+        private float RankedStatusScale => QuaverWindowManager.IsWidescreen ? 1 : 0.85f;
+
+        /// <summary>
+        /// </summary>
         /// <param name="mapset"></param>
         public DrawableMapsetContainer(DrawableMapset mapset)
         {
             ParentMapset = mapset;
             Parent = ParentMapset;
 
-            Size = new ScalableVector2(1188, 86);
+            Size = new ScalableVector2(DrawableMapset.WIDTH, DrawableMapset.CONTAINER_HEIGHT);
 
             CreateButton();
             CreateTitle();
@@ -137,21 +142,23 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
         /// <param name="index"></param>
         public void UpdateContent(Mapset item, int index)
         {
+            var truncateWidth = (int) (DrawableMapset.WIDTH * 0.32f);
+
             // Give title an elipsis
             if (MapsetHelper.IsSingleDifficultySorted())
             {
-                Title.FontSize = 22;
+                Title.FontSize = QuaverWindowManager.IsWidescreen ? 22 : 20;
                 Title.Text = $"{item.Artist} - {item.Title}";
-                Title.TruncateWithEllipsis(400);
+                Title.TruncateWithEllipsis(truncateWidth);
             }
             else
             {
-                Title.FontSize = 26;
+                Title.FontSize = QuaverWindowManager.IsWidescreen ? 26 : 22;
                 Title.Text = item.Title;
-                Title.TruncateWithEllipsis(400);
+                Title.TruncateWithEllipsis(truncateWidth);
 
                 Artist.Text = $"{item.Artist}";
-                Artist.TruncateWithEllipsis(400);
+                Artist.TruncateWithEllipsis(truncateWidth);
             }
 
             Creator.Text = $"{item.Creator}";
@@ -254,7 +261,7 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
             {
                 Parent = this,
                 Alignment = Alignment.MidRight,
-                Size = new ScalableVector2(421, 82),
+                Size = new ScalableVector2(DrawableBanner.WIDTH, Height - 4),
                 X = -2,
                 UsePreviousSpriteBatchOptions = true
             };
@@ -332,7 +339,7 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
             {
                 Parent = this,
                 Alignment = Alignment.MidRight,
-                Size = new ScalableVector2(115, 28),
+                Size = new ScalableVector2(115 * RankedStatusScale, 28 * RankedStatusScale),
                 X = Banner.X - Banner.Width - 18,
                 Image = UserInterface.StatusPanel,
                 UsePreviousSpriteBatchOptions = true
@@ -347,7 +354,7 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
             {
                 Parent = this,
                 Alignment = Alignment.MidRight,
-                Size = new ScalableVector2(71, 28),
+                Size = new ScalableVector2(71 * RankedStatusScale, 28 * RankedStatusScale),
                 X = RankedStatusSprite.X - RankedStatusSprite.Width - 18,
                 UsePreviousSpriteBatchOptions = true
             };

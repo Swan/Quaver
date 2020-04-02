@@ -9,6 +9,7 @@ using Quaver.Shared.Screens.Selection.UI.Maps.Components;
 using Quaver.Shared.Screens.Selection.UI.Maps.Components.Difficulty;
 using Quaver.Shared.Screens.Selection.UI.Mapsets;
 using Quaver.Shared.Skinning;
+using Quaver.Shared.Window;
 using Wobble;
 using Wobble.Assets;
 using Wobble.Graphics;
@@ -62,13 +63,17 @@ namespace Quaver.Shared.Screens.Selection.UI.Maps
 
         /// <summary>
         /// </summary>
+        private int TextSize { get; } = QuaverWindowManager.IsWidescreen ? 26 : 22;
+
+        /// <summary>
+        /// </summary>
         /// <param name="parentMap"></param>
         public DrawableMapContainer(DrawableMap parentMap)
         {
             ParentMap = parentMap;
             Parent = ParentMap;
 
-            Size = new ScalableVector2(1188, 86);
+            Size = new ScalableVector2(DrawableMapset.WIDTH, DrawableMapset.CONTAINER_HEIGHT);
 
             CreateButton();
             CreateDifficultyName();
@@ -244,7 +249,7 @@ namespace Quaver.Shared.Screens.Selection.UI.Maps
         /// </summary>
         private void CreateDifficultyName()
         {
-            Name = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "DIFFICULTY", 26)
+            Name = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "DIFFICULTY", TextSize)
             {
                 Parent = this,
                 Position = new ScalableVector2(PaddingX, 18),
@@ -263,7 +268,7 @@ namespace Quaver.Shared.Screens.Selection.UI.Maps
                 Alignment = Alignment.MidRight,
                 X = -Name.X,
                 UsePreviousSpriteBatchOptions = true,
-                FontSize = 24
+                FontSize = TextSize
             };
         }
 

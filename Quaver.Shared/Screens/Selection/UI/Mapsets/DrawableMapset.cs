@@ -12,6 +12,7 @@ using Quaver.Shared.Graphics.Containers;
 using Quaver.Shared.Helpers;
 using Quaver.Shared.Modifiers;
 using Quaver.Shared.Online;
+using Quaver.Shared.Window;
 using Wobble.Assets;
 using Wobble.Bindables;
 using Wobble.Graphics;
@@ -21,6 +22,7 @@ using Wobble.Graphics.Sprites.Text;
 using Wobble.Graphics.UI.Buttons;
 using Wobble.Input;
 using Wobble.Managers;
+using Wobble.Window;
 
 namespace Quaver.Shared.Screens.Selection.UI.Mapsets
 {
@@ -35,7 +37,34 @@ namespace Quaver.Shared.Screens.Selection.UI.Mapsets
 
         /// <summary>
         /// </summary>
-        public static int WIDTH { get; } = 1188;
+        public static int TRUE_WIDTH { get; } = 1188;
+
+        /// <summary>
+        /// </summary>
+        public static int WIDTH
+        {
+            get
+            {
+                float width = TRUE_WIDTH;
+
+                switch (QuaverWindowManager.Ratio)
+                {
+                    case AspectRatio.Standard:
+                    case AspectRatio.Ultrawide:
+                        width = WindowManager.Width * 0.50f;
+                        break;
+                    case AspectRatio.SixteenByTen:
+                        width = WindowManager.Width * 0.58f;
+                        break;
+                }
+
+                return (int) width;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public static int CONTAINER_HEIGHT => 86;
 
         /// <summary>
         ///     Contains the actual mapset
