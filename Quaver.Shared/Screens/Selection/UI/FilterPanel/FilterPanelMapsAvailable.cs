@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Quaver.Shared.Assets;
 using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Graphics;
+using Quaver.Shared.Window;
 using Wobble.Bindables;
 using Wobble.Graphics;
 using Wobble.Graphics.Sprites.Text;
@@ -33,6 +34,8 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel
         ///     The amount of space between <see cref="TextCount"/> and <see cref="TextSpacing"/>
         /// </summary>
         private const int TextSpacing = 4;
+
+        public static int FontSize => QuaverWindowManager.IsWidescreen ? 21 : 18;
 
         /// <summary>
         /// </summary>
@@ -67,7 +70,7 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel
         /// </summary>
         private void CreateTextCount()
         {
-            TextCount = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "0", 21)
+            TextCount = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "0", FontSize)
             {
                 Parent = this,
                 Tint = Colors.MainAccent
@@ -81,7 +84,7 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel
         /// </summary>
         private void CreateTextMapsFound()
         {
-            TextMapsFound = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "Maps Found", 21)
+            TextMapsFound = new SpriteTextPlus(FontManager.GetWobbleFont(Fonts.LatoBlack), "Maps Found", FontSize)
             {
                 Parent = this,
                 X = TextCount.Width + TextSpacing

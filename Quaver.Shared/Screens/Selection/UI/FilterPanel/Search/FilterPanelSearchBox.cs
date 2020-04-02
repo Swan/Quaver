@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Quaver.Shared.Assets;
@@ -7,6 +8,7 @@ using Quaver.Shared.Database.Maps;
 using Quaver.Shared.Graphics;
 using Quaver.Shared.Helpers;
 using Quaver.Shared.Scheduling;
+using Quaver.Shared.Window;
 using Wobble.Assets;
 using Wobble.Bindables;
 using Wobble.Graphics;
@@ -47,6 +49,10 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.Search
         /// </summary>
         public static string PreviousSearchTerm { get; private set; } = "";
 
+        /// <summary>
+        /// </summary>
+        public static ScalableVector2 SIZE => QuaverWindowManager.IsWidescreen ? new ScalableVector2(280, 40) : new ScalableVector2(200, 36);
+
         /// <inheritdoc />
         /// <summary>
         /// </summary>
@@ -56,7 +62,7 @@ namespace Quaver.Shared.Screens.Selection.UI.FilterPanel.Search
         /// <param name="placeHolderText"></param>
         public FilterPanelSearchBox(Bindable<string> currentSearchQuery, Bindable<List<Mapset>> availableMapsets,
             Bindable<bool> isPlayTesting, string placeHolderText)
-            : base(new ScalableVector2(280, 40), FontManager.GetWobbleFont(Fonts.LatoBlack),22, PreviousSearchTerm, placeHolderText)
+            : base(SIZE, FontManager.GetWobbleFont(Fonts.LatoBlack), FilterPanelMapsAvailable.FontSize, PreviousSearchTerm, placeHolderText)
         {
             CurrentSearchQuery = currentSearchQuery;
             AvailableMapsets = availableMapsets;
