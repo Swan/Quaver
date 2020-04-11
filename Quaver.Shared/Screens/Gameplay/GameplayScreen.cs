@@ -863,10 +863,17 @@ namespace Quaver.Shared.Screens.Gameplay
                 return;
             }
 
-            if (LastRecordedCombo >= 20 && Ruleset.ScoreProcessor.Combo == 0)
-                SkinManager.Skin.SoundComboBreak.CreateChannel().Play();
+            var processor = Ruleset.ScoreProcessor;
 
-            LastRecordedCombo = Ruleset.ScoreProcessor.Combo;
+            if (processor.Combo == 0)
+            {
+                var missedIntro = processor.TotalJudgementCount <= 20 && processor.CurrentJudgements[Judgement.Miss] == 1;
+
+                if (LastRecordedCombo >= 20 || missedIntro)
+                    SkinManager.Skin.SoundComboBreak.CreateChannel().Play();
+            }
+
+            LastRecordedCombo = processor.Combo;
         }
 
         /// <summary>
